@@ -92,7 +92,7 @@ namespace AlgoLibrary
         {
             bool[] visit = new bool[verticesCount];
             int[] parents = new int[verticesCount];
-            Array.Fill(parents, -1);
+            System.Array.Fill(parents, -1);
             Queue<int> vertices = new Queue<int>();
             visit[sourcevertix] = true;
             vertices.Enqueue(sourcevertix);
