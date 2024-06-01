@@ -11,13 +11,26 @@ namespace AlgoLibrary
         public int Capcity;
         public int Count = 0;
         int[] array;
-        public Array(int capcity)
+        public Array(int capcity = 3)
         {
             this.Capcity = capcity;
             array = new int[Capcity];
         }
 
-        public bool IsFul()
+
+        public int this[int index]
+        {
+            get { 
+            
+            if (index>= 0 && index < Count)
+                 return array[index];
+            else
+            throw new IndexOutOfRangeException();
+            }
+        }
+        
+
+        public bool IsFull()
         {
             return Count > Capcity;
         }
@@ -28,24 +41,36 @@ namespace AlgoLibrary
 
         public void push(int value)
         {
-            if (!IsFul())
-                array[Count++] = value;
-            else
-                throw new InvalidOperationException("invailed opertion");
+            if (IsFull())
+            {
+                Resize();
+            }
+            array[Count++] = value;
+        }
+
+        private void Resize()
+        {
+            Capcity = 2 * Capcity;
+            var newarray = new int[Capcity];
+            for (int i = 0; i < Count; i++)
+            {
+                newarray[i] = array[i];
+            }
+            array = newarray;
         }
 
         public void InsertAt(int index , int value)
         {
-            if(!IsFul())
+            if(IsFull())
             {
-                for (int i = Count; i >  index; i++)
-                {
-                    array[i] = array[i - 1]; 
-                }
-                array[index] = value;
+                Resize();
             }
-            else
-                throw new InvalidOperationException("invailed opertion");
+            for (int i = Count; i > index; i++)
+            {
+                array[i] = array[i - 1];
+            }
+            array[index] = value;
+            Count++;
         }
 
         public void Remove(int value)
@@ -92,9 +117,20 @@ namespace AlgoLibrary
             }
             index = -1;
             return false;
+        } 
+        public bool Contain(int value)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (array[i] == value)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public void update (int index , int value)
+        public void Update (int index , int value)
         {
             if (index > 0 && index < Count)
                    array[index] = value;

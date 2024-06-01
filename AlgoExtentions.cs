@@ -252,6 +252,110 @@ namespace AlgoLibrary
 
         }
 
+        public static void CheckBalanced(string s)
+        {
+            Stack<char> Hub = new Stack<char>();
+            bool isbalanced = true;
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                if (isOpenbaracket(c))
+                {
+                    Hub.Push(c);
+                }
+                else if (isClosebarcket(c))
+                {
+                    if (Hub.Count == 0)
+                    {
+                        isbalanced = false;
+                        break;
+                    }
+                    else if (isPair(Hub.Peek(), c))
+                    {
+                        Hub.Pop();
+                    }
+                    else
+                    {
+                        isbalanced = false;
+                        break;
+                    }
+                }
+            }
 
+            if (Hub.Count == 0 && isbalanced)
+            {
+                Console.WriteLine("Balanced Brackets ...");
+            }
+            else
+            {
+                Console.WriteLine("Un Balanced Brackets ...");
+            }
+            bool isOpenbaracket(char c)
+                => c == '[' || c == '{' || c == '(';
+            bool isClosebarcket(char c)
+                => c == ']' || c == '}' || c == ')';
+            bool isPair(char c1, char c2)
+               => c1 == '[' && c2 == ']' || c1 == '{' && c2 == '}' || c1 == '(' && c2 == ')';
+        }
+
+        public static void InfixToPostfix(string s)
+        {
+            Stack<char> hub = new Stack<char>();
+            List<string> output = new();
+            Dictionary<char, int> peroirty = new Dictionary<char, int>() {
+                                                                          {'(',5},
+                                                                          { '^',4},
+                                                                          {'*',3 },
+                                                                          {'/',3},
+                                                                          {'%',3},
+                                                                          {'+',2},
+                                                                          {'-',2},
+                                                                         };
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (peroirty.ContainsKey(s[i]))
+                {
+
+                    if (hub.Count != 0 && peroirty[hub.Peek()] >= peroirty[s[i]])
+                    {
+                        while (hub.Count > 0 && hub.Peek() != '(')
+                        {
+                            output.Add(hub.Pop().ToString());
+                        }
+
+                    }
+
+                    hub.Push(s[i]);
+                }
+                else if (s[i] == ')')
+                {
+                    while (hub.Peek() != '(')
+                    {
+                        output.Add(hub.Pop().ToString());
+                    }
+                    hub.Pop();
+                }
+                else
+                {
+                    string operand = "";
+                    while (i < s.Length && char.IsLetterOrDigit(s[i]))
+                    {
+                        operand += s[i];
+                        i++;
+                    }
+                    output.Add(operand);
+                    i--;
+                }
+
+            }
+            while (hub.Count != 0)
+            {
+                output.Add(hub.Pop().ToString());
+            }
+
+            Console.WriteLine(string.Join(" ", output));
+
+
+        }
     }
 }
