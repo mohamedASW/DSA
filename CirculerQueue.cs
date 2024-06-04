@@ -75,10 +75,12 @@ namespace AlgoLibrary
             {
                 return false;
             }
+            int current = front;
             for (int i = 0; i < count; i++)
             {
-                if (arr[i] == val)
+                if (arr[current] == val)
                     return true;
+                current = (current+1)%Capcity;
             }
             return false;
         
